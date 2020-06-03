@@ -1,4 +1,4 @@
-# Udacity's Deep RL Nanodegree - Project 2: Continuous Control
+# Udacity's Deep RL Nanodegree - Project 3: Collaboration and Competition
 
 [//]: # (Image References)
 
@@ -7,7 +7,7 @@
 
 ## Introduction
 
-This repository contains my solution for the second project of the Deep Reinforcement Learning Nanodegree from Udacity. In this exercise an RL-agent is tasked with controlling a two-jointed arm as it moves to track the position of a target circling around it. The environment was made with Unity's ML-Agents framework and there are two variations one environment has 20 agents operating individually for parallel learning, and the other one only has a single agent.
+This repository contains my solution for the third project of the Deep Reinforcement Learning Nanodegree from Udacity. In this exercise an RL-agent controls two rackets to bounce a ball over a net, somewhat like playing Ping-Pong. The environment was made with Unity's ML-Agents framework.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/11748427/83365478-9c47b600-a3a8-11ea-92b0-a750598a70e7.gif" alt="Trained Agent"/>
@@ -18,19 +18,33 @@ This repository contains my solution for the second project of the Deep Reinforc
 
 #### Rewards
 
-A reward of **`+0.1`** is provided for each step that the agent's hand is in the goal location.
+- If an agent hits the ball over the net, it receives a reward of  **+0.1**.
+- If an agent lets a ball hit the ground or hits the ball out of bounds, it receives a reward of **-0.01**.
+- No rewards are provided in a per-time-step basis.
 
 #### State Space
 
-The state space consists of 33 variables corresponding to position, rotation, velocity, and angular velocities of the arm. 
+The observation space consists of **`8`** variables corresponding to the position and velocity of the ball and racket, the environment returns 3 stacked observation spaces at each timestep, son the returned variable has dimension **`24`**.
+The vector has the following variables:
+<br>
+**`[Racket Pos X, Racket Pos Y, Racket Vel X, Racket Vel Y, Ball Pos X, Ball Pos Y, Racket Vel X, Racket Vel y]`**
+
+(For some reason it seems that the last two elements are a repeat of the third and fourth elements.)
 
 #### Action Space
 
-Each action is a vector with four numbers, corresponding to torque applicable to two joints. Every entry in the action vector should be a number between **`-1`** and **`1`**.
+Two continuous actions are available, corresponding to movement toward (or away from) the net, and jumping. it looks the following.
+
+**`[Racket Movement, Racket Jump]`**
+
+- **`Racket Movement`**: **Positive** values move the racket at a constant speed towards the net, **Negative** values move it away from the net.
+- **`Racket Jump`**: Values larger than **0.5** trigger a Jump, Values lower or equal than **0.5** do nothing.
+
+Every entry in the action vector should be a number between **`-1`** and **`+1`**.
 
 #### Task Goal
 
-Such as the goal of the agent is to maintain its position at the target locations for as many time steps as possible. In order to consider the environment solved, the agent must get an average score of +30 over 100 consecutive episodes. In the case of the environment with 20 agents, the score of an episode is calculated as the average of the scores of all agents.
+The goal of each agent is to keep the ball in play for as many time steps as possible. In order to consider the environment solved, any of the agents must get an average score of +0.5 over 100 consecutive episodes. The score of a particular episode is the maximum score between the two agents.
 
 
 
@@ -57,8 +71,8 @@ Most of these instructions were borrowed from the installation instructions in U
 
 2. Clone the repository (if you haven't already!), and navigate to the `python/` folder.  Then, install several dependencies.
 ```bash
-git clone https://github.com/SaidAlvarado/Udacity-DeepRL-Project_2_Continuous_Control.git
-cd Udacity-DeepRL-Project_2_Continuous_Control/python
+git clone https://github.com/SaidAlvarado/https://github.com/SaidAlvarado/Udacity-DeepRL-Project_3_Collaboration_and_Competition.git
+cd Udacity-DeepRL-Project_3_Collaboration_and_Competition/python
 pip install .
 ```
 
@@ -76,23 +90,16 @@ python -m ipykernel install --user --name drlnd --display-name "drlnd"
 
 5. Download the environment from one of the links below.  You need only select the environment that matches your operating system:
 
-    - **_Version 1: One (1) Agent_**
-        - Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/one_agent/Reacher_Linux.zip)
-        - Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/one_agent/Reacher.app.zip)
-        - Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/one_agent/Reacher_Windows_x86.zip)
-        - Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/one_agent/Reacher_Windows_x86_64.zip)
-
-    - **_Version 2: Twenty (20) Agents_**
-        - Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Linux.zip)
-        - Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher.app.zip)
-        - Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Windows_x86.zip)
-        - Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Windows_x86_64.zip)
+    - Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Linux.zip)
+    - Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis.app.zip)
+    - Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86.zip)
+    - Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86_64.zip)
 
 6. Decompress the file into the root directory of the repository.
 
 ### Run the code.
 
-7. Follow the instructions in `DDPG_Continuous_Control.ipynb` to train and see the agent in action.
+7. Follow the instructions in `DDPG_Collaboration_and_Competition.ipynb` to train and see the agent in action.
 
 
 ## Understanding the Algorithm
