@@ -22,12 +22,16 @@ WEIGHT_DECAY = 0        # L2 weight decay
 UPDATE_EVERY = 20       # Timesteps to wait before updating the network
 UPDATE_STEPS = 10       # Times to run the learning process at each UPDATE_EVERY
 
+## Going to start trying to train at every timestep.
+UPDATE_EVERY = 1       # Timesteps to wait before updating the network
+UPDATE_STEPS = 1       # Times to run the learning process at each UPDATE_EVERY
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class Agent():
     """Interacts with and learns from the environment."""
 
-    def __init__(self, state_size, action_size, num_agents, random_seed):
+    def __init__(self, state_size, action_size, random_seed):
         """Initialize an Agent object.
 
         Params
@@ -38,7 +42,6 @@ class Agent():
         """
         self.state_size = state_size
         self.action_size = action_size
-        self.num_agents = num_agents
         self.seed = random.seed(random_seed)
 
         # Actor Network (w/ Target Network)
@@ -52,7 +55,7 @@ class Agent():
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=LR_CRITIC, weight_decay=WEIGHT_DECAY)
 
         # Noise process
-        self.noise = OUNoise((num_agents, action_size), random_seed)
+        self.noise = OUNoise(action_size, random_seed)
 
         # Replay memory
         self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, random_seed)
@@ -64,9 +67,7 @@ class Agent():
         """Save experience in replay memory, and use random sample from buffer to learn."""
 
         # Save experience / reward
-        for i in range(self.num_agents):
-            # Add to the replay buffer the experience of each of the agents
-            self.memory.add(state[i], action[i], reward[i], next_state[i], done[i])
+        self.memory.add(state, action, reward, next_state, done)
 
         # Count that you took a new step
         self.timestep += 1
@@ -120,7 +121,7 @@ class Agent():
         self.critic_optimizer.zero_grad()
         critic_loss.backward()
         # Clip the gradients of the Critic to 1.
-        torch.nn.utils.clip_grad_norm_(self.critic_local.parameters(), 1)
+#         torch.nn.utils.clip_grad_norm_(self.critic_local.parameters(), 1)
         self.critic_optimizer.step()
 
         # ---------------------------- update actor ---------------------------- #
