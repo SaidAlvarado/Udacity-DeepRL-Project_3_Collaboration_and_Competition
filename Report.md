@@ -1,4 +1,4 @@
-# Udacity's Deep RL Nanodegree - Project 2: Continuous Control
+# Udacity's Deep RL Nanodegree - Project 3: Collaboration and Competition
 
 ## Technical Report
 
@@ -23,7 +23,7 @@ In this scenario an RL-agent controls two rackets to bounce a ball over a net, s
 
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/11748427/83697685-f42c2a00-a5ff-11ea-9a09-07a3fde04525.png"/>
+  <img src="https://user-images.githubusercontent.com/11748427/83697685-f42c2a00-a5ff-11ea-9a09-07a3fde04525.png"  width="70%" height="70%"/>
   
 </p>
 
@@ -37,24 +37,22 @@ This environment provides the following rewards:
 - If an agent lets a ball hit the ground or hits the ball out of bounds, it receives a reward of **-0.01**.
 - No rewards are provided in a per-time-step basis.
 
-
+<br>
 
 #### Actions
 
-Two continuous actions are available, corresponding to movement toward (or away from) the net, and jumping. it looks the following.
-
-**`[Racket Movement, Racket Jump]`**
+Two continuous actions are available, corresponding to movement toward (or away from) the net, and jumping. it looks like the following. **`[Racket Movement, Racket Jump]`**, where:
 
 - **`Racket Movement`**: **Positive** values move the racket at a constant speed towards the net, **Negative** values move it away from the net.
 - **`Racket Jump`**: Values larger than **0.5** trigger a Jump, Values lower or equal than **0.5** do nothing.
 
 Every entry in the action vector should be a number between **`-1`** and **`+1`**.
 
-
+<br>
 
 #### State Space
 
-The observation space consists of **`8`** variables corresponding to the position and velocity of the ball and racket, the environment returns 3 stacked observation spaces at each timestep, so the returned variable has dimension **`24`**.
+The observation space consists of **`8`** variables corresponding to the position and velocity of the ball and racket, the environment returns 3 stacked observation spaces at each timestep, so the returned variable has **`24`** dimensions.
 The vector has the following variables:
 <br>
 **`[Racket Pos X, Racket Pos Y, Racket Vel X, Racket Vel Y, Ball Pos X, Ball Pos Y, Racket Vel X, Racket Vel y]`**
@@ -87,14 +85,14 @@ This works particularly well for the current environment given that both its **S
 
 #### Environment's frame of reference
 
-The environment is programmed in such a way that the observations are provided a pair at a time one for each racket, and the data is always presented from the perspective of the local frame of each respective racket.
+The environment is programmed in such a way that the observations are provided a pair at a time one, for each racket. The data is always presented from the perspective of the local frame of reference of each respective racket.
 
 This means that the data is flipped so as to that X positive axis is always pointing towards the net.
 
-This becomes useful as it is very easy to separately add the experience of each of the rackets to the experience buffer and use to train a single neural network that can control them both independently. 
+This is useful as it is very easy to add the experience of each of the rackets to the experience buffer separately and use them to train a single neural network that can control them both independently. 
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/11748427/83697730-132abc00-a600-11ea-8a73-d96ac2b7acbd.png"/>
+  <img src="https://user-images.githubusercontent.com/11748427/83697730-132abc00-a600-11ea-8a73-d96ac2b7acbd.png"  width="70%" height="70%" />
   
 </p>
 Notice that the orientation of the frame of reference is reversed from one racket to the other in such a way that the rackets are always in the negative side of the X-axis. The direction of the action "Forward" is also reversed, and the net serves as the central zero-point of the X-axis
@@ -110,7 +108,7 @@ All steps' **`(State, Action, Reward, Next State)`**   tuples  from each one of 
 Since this is arguably an Actor-Critic method, we require 2 Neural Networks. One to estimate the best action for a particular state (One racket at a time) and another one to estimate the Value Function. Each of these must have a duplicate network which will serve as the _Target_ during training. Given that the input is not an image, there is no need to use a Convolutional Architecture. Instead, it is sufficient to have networks with two fully connected RELU internal layers ending with a Tanh function and linear function for the actor and the critic respectively.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/11748427/83698046-bed40c00-a600-11ea-9c1c-a14d67dcdb43.png" alt="Neural Network"/>
+  <img src="https://user-images.githubusercontent.com/11748427/83698046-bed40c00-a600-11ea-9c1c-a14d67dcdb43.png" alt="Neural Network"  width="70%" height="70%" />
 </p>
 
 
