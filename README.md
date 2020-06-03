@@ -10,7 +10,7 @@
 This repository contains my solution for the third project of the Deep Reinforcement Learning Nanodegree from Udacity. In this exercise an RL-agent controls two rackets to bounce a ball over a net, somewhat like playing Ping-Pong. The environment was made with Unity's ML-Agents framework.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/11748427/83365478-9c47b600-a3a8-11ea-92b0-a750598a70e7.gif" alt="Trained Agent"/>
+  <img src="https://user-images.githubusercontent.com/11748427/83697644-d52d9800-a5ff-11ea-9f21-bbc9b0b93e9a.gif" alt="Trained Agent"/>
 </p>
 
 
@@ -21,6 +21,7 @@ This repository contains my solution for the third project of the Deep Reinforce
 - If an agent hits the ball over the net, it receives a reward of  **+0.1**.
 - If an agent lets a ball hit the ground or hits the ball out of bounds, it receives a reward of **-0.01**.
 - No rewards are provided in a per-time-step basis.
+<br>
 
 #### State Space
 
@@ -30,6 +31,7 @@ The vector has the following variables:
 **`[Racket Pos X, Racket Pos Y, Racket Vel X, Racket Vel Y, Ball Pos X, Ball Pos Y, Racket Vel X, Racket Vel y]`**
 
 (For some reason it seems that the last two elements are a repeat of the third and fourth elements.)
+<br>
 
 #### Action Space
 
@@ -41,11 +43,12 @@ Two continuous actions are available, corresponding to movement toward (or away 
 - **`Racket Jump`**: Values larger than **0.5** trigger a Jump, Values lower or equal than **0.5** do nothing.
 
 Every entry in the action vector should be a number between **`-1`** and **`+1`**.
+<br>
 
 #### Task Goal
 
 The goal of each agent is to keep the ball in play for as many time steps as possible. In order to consider the environment solved, any of the agents must get an average score of +0.5 over 100 consecutive episodes. The score of a particular episode is the maximum score between the two agents.
-
+<br>
 
 
 ## Getting Started
