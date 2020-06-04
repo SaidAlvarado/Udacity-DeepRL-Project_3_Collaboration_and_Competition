@@ -19,9 +19,6 @@ LR_ACTOR = 2e-4         # learning rate of the actor
 LR_CRITIC = 1e-4        # learning rate of the critic
 WEIGHT_DECAY = 0        # L2 weight decay
 
-UPDATE_EVERY = 20       # Timesteps to wait before updating the network
-UPDATE_STEPS = 10       # Times to run the learning process at each UPDATE_EVERY
-
 ## Going to start trying to train at every timestep.
 UPDATE_EVERY = 1       # Timesteps to wait before updating the network
 UPDATE_STEPS = 1       # Times to run the learning process at each UPDATE_EVERY
@@ -55,7 +52,7 @@ class Agent():
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=LR_CRITIC, weight_decay=WEIGHT_DECAY)
 
         # Noise process
-        self.noise = OUNoise(action_size, random_seed)
+        self.noise = OUNoise(action_size, random_seed,theta=0.015, sigma=0.02)
 
         # Replay memory
         self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, random_seed)
@@ -121,7 +118,7 @@ class Agent():
         self.critic_optimizer.zero_grad()
         critic_loss.backward()
         # Clip the gradients of the Critic to 1.
-#         torch.nn.utils.clip_grad_norm_(self.critic_local.parameters(), 1)
+        torch.nn.utils.clip_grad_norm_(self.critic_local.parameters(), 1)
         self.critic_optimizer.step()
 
         # ---------------------------- update actor ---------------------------- #
